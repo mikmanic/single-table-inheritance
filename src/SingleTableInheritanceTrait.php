@@ -174,6 +174,11 @@ trait SingleTableInheritanceTrait {
 
     $classType = isset($attributes->$typeField) ? $attributes->$typeField : null;
 
+      //FIXME Fails because of missing typeField, when inherited class is touched by relation...
+      if ($classType === null && !$this->exists && property_exists(static::class, 'singleTableType')) {
+          $classType = static::$singleTableType;
+      }
+
     if ($classType !== null) {
       $childTypes = static::getSingleTableTypeMap();
       if (array_key_exists($classType, $childTypes)) {
